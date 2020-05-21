@@ -26,7 +26,7 @@ router.post('/GetInfo', (req, res) => {
 // @desc    create new acc
 // @access  private
 router.post('/CreateAcc', (req, res) => {
-    LoanData.create(req.body, (err, res) => {
+    LoanData.create(req.body, (err) => {
         if(err) {
             return res.status(500).json('bad request');
         }
