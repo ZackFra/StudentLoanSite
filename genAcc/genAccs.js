@@ -25,9 +25,9 @@ function genAccs(i, stop) {
             DOB
         }
 
-        axios.post('169.254.125.99:5000/CreateAcc', request)
+        axios.post('167.172.138.178:5000/Data/CreateAcc', request)
         .then( res => {
-            // do nothing
+            console.log('account created! :)');
         })
         .catch( err => {
             console.log(err);
