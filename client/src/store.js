@@ -6,7 +6,8 @@ import rootReducer from './reducers';
 const initialState = {
     tab: 'STANDARD',
     user: '',
-    pass: ''
+	pass: '',
+	throttle: false
 }
 
 const middleware = [thunk];

@@ -5,13 +5,23 @@ import { login } from './actions';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const {user, pass, tab} = useSelector(state => state);
+  const {user, pass, tab, throttle} = useSelector(state => state);
   let dispatch = useDispatch();
 
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault();
+    let authenticated = undefined;
 
-    const authenticated = login({user, pass}).then(res => true).catch(err => false);
+    if(!throttle) {
+      authenticated = await login({user, pass}).then(res => true).catch(err => false);
+      dispatch({type: 'TOGGLE_THROTTLE'});
+      setTimeout(() => { 
+        dispatch({type: 'TOGGLE_THROTTLE'});
+      }, 1000);
+    } else {
+      document.getElementById('invalid').innerText = 'Too many requests. Please wait a moment then try again.';
+      return;
+    }
 
     if(authenticated) {
       dispatch({type: 'SET_TAB', payload: 'VIEW_ACCOUNTS'});

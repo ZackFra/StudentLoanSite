@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const DataRoute = require('./routes/DataRoute');
+const LoginRoute = require('./routes/Login');
 
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
@@ -13,6 +14,7 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use('/Data', DataRoute);
+app.use('/Login', LoginRoute);
 
 const URI = process.env.ATLAS_URI;
 

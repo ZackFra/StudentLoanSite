@@ -13,7 +13,10 @@ function reducer(state, action) {
             break;
         case 'SET_USER':
             ns.user = action.payload;
-            break;
+			break;
+		case 'TOGGLE_THROTTLE':
+			ns.throttle = !ns.throttle;
+			break;
 		default: 
 			break;
 	}
