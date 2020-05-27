@@ -9,7 +9,9 @@ const initialState = {
 	pass: '',
 	throttle: false,
 	accounts: undefined,
-	infoPanels: []
+	infoPanels: [],
+	selected: [],
+	lois: undefined
 }
 
 const middleware = [thunk];

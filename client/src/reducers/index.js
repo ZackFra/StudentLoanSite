@@ -21,7 +21,13 @@ function reducer(state, action) {
 			ns.accounts = action.payload;
 			break;
 		case 'SET_INFO_PANEL':
-			ns.infoPanels.push(action.payload);
+			ns.infoPanels = action.payload;
+			break;
+		case 'SET_SELECTED':
+			ns.selected = action.payload;
+			break;
+		case 'SET_LOIS':
+			ns.lois = action.payload;
 			break;
 		default: 
 			break;
