@@ -17,6 +17,12 @@ function reducer(state, action) {
 		case 'TOGGLE_THROTTLE':
 			ns.throttle = !ns.throttle;
 			break;
+		case 'SET_ACCOUNTS':
+			ns.accounts = action.payload;
+			break;
+		case 'SET_INFO_PANEL':
+			ns.infoPanels.push(action.payload);
+			break;
 		default: 
 			break;
 	}

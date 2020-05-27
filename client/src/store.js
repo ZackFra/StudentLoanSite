@@ -7,7 +7,9 @@ const initialState = {
     tab: 'STANDARD',
     user: '',
 	pass: '',
-	throttle: false
+	throttle: false,
+	accounts: undefined,
+	infoPanels: []
 }
 
 const middleware = [thunk];

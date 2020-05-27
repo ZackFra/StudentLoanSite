@@ -1,13 +1,67 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { login } from './actions';
+import { login, getAccounts } from './actions';
+import {Row, Col} from 'reactstrap';
+import uuid4 from 'uuid4';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const {user, pass, tab, throttle} = useSelector(state => state);
+  const {user, pass, tab, throttle, accounts, infoPanels} = useSelector(state => state);
   let dispatch = useDispatch();
 
+  function addInfoPanel(e) { 
+    let users = Array.from(document.getElementById('selectAccounts')).filter(option => option.checked);
+    users = users.map(option => option.value);
+    let data = accounts.filter(acc => users.includes(acc.firstName + ' ' + acc.lastName));
+    let panels = data.map(acc => <InfoPanel key={uuid4()} data={acc}/>);
+    dispatch({type: 'SET_INFO_PANEL', payload: panels});
+  }
+
+  // Account Data component to keep track of it's data
+  function AccountData(props) {
+    const [data, setData] = useState(props.acc);
+    return (
+      <option 
+        style={props.style}
+        >
+        {props.acc.firstName + ' ' + props.acc.lastName}
+      </option>
+    )
+  }
+
+  // info about a specific account,
+  // rendered on account select
+  function InfoPanel(props) {
+    let { user, debt, lastFour, DOB, firstName, lastName } = props.data;
+    return (
+      <div style={{marginLeft: '20px'}}>
+        <Row>
+          <Col>Name: </Col>
+          <Col>{firstName + ' ' + lastName}</Col>
+        </Row>
+        <Row>
+          <Col>Account: </Col>
+          <Col>{user}</Col>
+        </Row>
+        <Row>
+          <Col>Owed: </Col>
+          <Col>{debt}</Col>
+        </Row>
+        <Row>
+          <Col>DOB: </Col>
+          <Col>{DOB}</Col>
+        </Row>
+        <Row>
+          <Col>SSN: </Col>
+          <Col>***-**-{lastFour}</Col>
+        </Row>
+        <hr style={{borderTop: 'dotted 1px'}} />
+      </div>
+    );
+  }
+
+  // handles login submission
   async function onSubmit(e) {
     e.preventDefault();
     let authenticated = undefined;
@@ -24,7 +78,12 @@ function App() {
     }
 
     if(authenticated) {
-      dispatch({type: 'SET_TAB', payload: 'VIEW_ACCOUNTS'});
+      getAccounts().then(res => {
+        dispatch({type: 'SET_ACCOUNTS', payload: res.data});
+      }).catch( err => {
+        console.log(err)
+      })
+      dispatch({type: 'SET_TAB', payload: 'LOGGED_IN'});
     }
     else {
       document.getElementById('invalid').innerText = 'Invalid Password';
@@ -33,7 +92,37 @@ function App() {
     dispatch({type: 'SET_PASS', payload: ''});
   }
 
+  // selects all accounts
+  function selectAll() {
+    let options = document.getElementById('selectAccounts');
+    let checked = document.getElementById('selectAll').checked;
+    Array.from(options).map(option => option.selected = checked);
+  }
+
+  // displays accounts after they're gathered
+  function displayAccounts() {
+    if(accounts) {
+      return accounts.map(acc => <AccountData key={uuid4()} acc={acc} />);
+    }
+    return 'Loading...';
+  }
+
   switch(tab) {
+    case 'LOGGED_IN':
+      return (
+        <div className='accounts'>
+          <form className='form-group'>
+            <select multiple className='form-control' id='selectAccounts' onChange={addInfoPanel}>
+              {displayAccounts()};
+            </select>
+            <div style={{marginLeft: '20px'}}>
+              <input type='checkbox' className="form-check-input" id='selectAll' onChange={selectAll}/>
+              <label className="form-check-label" htmlFor="selectAll">Select All</label>
+            </div>
+          </form>
+          {infoPanels}
+        </div>
+      )
     default:
       return (
         <div>

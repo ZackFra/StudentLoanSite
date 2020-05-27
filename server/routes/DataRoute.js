@@ -2,19 +2,13 @@ const LoanData = require('./models/LoanData.model');
 const router = require('express').Router();
 
 
-// @route   POST loan data
+// @route   GET loan data
 // @desc    get loan datas
 // @access  public
-router.post('/GetInfo', (req, res) => {
-    const { user, pass } = req.body;
-
-    if(typeof user !== 'string' || typeof pass !== 'string') {
-        return res.status(500).json('Bad Request');
-    }
-
-    LoanData.findOne({user, pass})
-    .then( res => {
-        return res.status(200).json(res);
+router.get('/GetInfo', (req, res) => {
+    LoanData.find()
+    .then( data => {
+        return res.status(200).json(data);
     })
     .catch( err => {
         console.log(err);
