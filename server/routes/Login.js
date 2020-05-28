@@ -12,8 +12,8 @@ router.post('/', (req, res) => {
 // @desc    returns user data
 // @access  public
 router.post('/ClientLogin', (req, res) => {
-    const {user, pass} = req.body;
-    LoanData.findOne({user, pass})
+    const {username, password} = req.body;
+    LoanData.findOne({user: {$eq: user}, pass: {$eq: pass}})
     .then( data => {
         return res.status(200).json(data);
     })

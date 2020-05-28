@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const DataRoute = require('./routes/DataRoute');
 const LoginRoute = require('./routes/Login');
+const cors = require('cors');
 
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
@@ -11,6 +12,7 @@ require('dotenv').config();
 
 const app = express();
 
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use('/Data', DataRoute);
