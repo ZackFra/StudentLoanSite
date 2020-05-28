@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import './App.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { login, getAccounts } from './actions';
@@ -31,7 +31,6 @@ function App() {
 
   // Account Data component to keep track of it's data
   function AccountData(props) {
-    const [data, setData] = useState(props.acc);
     return (
       <option 
         style={props.style}
@@ -114,7 +113,7 @@ function App() {
 
   // displays accounts after they're gathered
   function displayAccounts() {
-    if(accounts) {
+    if(accounts !== undefined) {
       return accounts.map(acc => <AccountData key={uuid4()} acc={acc} />);
     }
     return 'Loading...';
